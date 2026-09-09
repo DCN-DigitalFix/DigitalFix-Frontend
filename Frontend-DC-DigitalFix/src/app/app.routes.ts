@@ -1,3 +1,11 @@
 import { Routes } from '@angular/router';
-
-export const routes: Routes = [];
+import { MsalGuard } from '@azure/msal-angular';
+import { Profile } from './profile/profile';
+ 
+export const routes: Routes = [
+    { 
+        path: 'profile', 
+        component: Profile, 
+        canActivate: [MsalGuard]
+    }
+];
