@@ -32,12 +32,13 @@ import {
   MsalService,
   MsalBroadcastService,
 } from '@azure/msal-angular';
+import { environment } from '../environments/environments';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: 'b2b09eef-fef9-4b63-9c40-3811bd8a6208',
-      authority: 'https://login.microsoftonline.com/a6a0c27e-18a7-4209-bd1b-32338be5cb66',
+      clientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
+      authority: 'https://login.microsoftonline.com/6e49fdba-8435-41ac-8074-7b1a04cfd543',
       redirectUri: 'http://localhost:4200',
       postLogoutRedirectUri: 'http://localhost:4200',
     },
@@ -51,23 +52,21 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: ['user.read'],
+      scopes: [...environment.azure.protectedResourceScopes],
     },
   };
 }
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
-  const protectedResourceMap = new Map<string, Array<string>>();
+  const protectedResourceMap = new Map<string, Array<string> | null>();
 
+  protectedResourceMap.set('https://graph.microsoft.com/v1.0/me', ['user.read']);
   protectedResourceMap.set(
-    'https://graph.microsoft.com/v1.0/me',
-    ['user.read'],
+    environment.apiBaseUrl + '/api',
+    environment.azure.protectedResourceScopes
   );
 
-  return {
-    interactionType: InteractionType.Redirect,
-    protectedResourceMap,
-  };
+  return { interactionType: InteractionType.Redirect, protectedResourceMap };
 }
 
 export const appConfig: ApplicationConfig = {

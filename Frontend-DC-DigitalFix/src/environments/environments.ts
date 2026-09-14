@@ -6,7 +6,7 @@ export const environment = {
 
  azure: {
 
-  clientId: 'b2b09eef-fef9-4b63-9c40-3811bd8a6208',
+  clientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
 
   tenantId: '6e49fdba-8435-41ac-8074-7b1a04cfd543',
 
@@ -18,7 +18,8 @@ export const environment = {
 
   // Sólo si usarás API con scopes:
 
-  protectedResourceScopes: ['api://b2b09eef-fef9-4b63-9c40-3811bd8a6208']
+  protectedResourceScopes: ['api://3925d7ba-75af-4c56-ad08-fc0c999298fb/read',
+                            'api://3925d7ba-75af-4c56-ad08-fc0c999298fb/Crear.OT',]
 
  },
 
