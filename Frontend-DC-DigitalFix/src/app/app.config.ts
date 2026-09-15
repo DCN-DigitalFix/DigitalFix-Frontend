@@ -1,46 +1,45 @@
 import {
   ApplicationConfig,
-  provideZonelessChangeDetection,
-  provideAppInitializer,
   inject,
+  provideAppInitializer,
+  provideZonelessChangeDetection,
 } from '@angular/core';
-
 import { provideRouter } from '@angular/router';
 import {
+  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptorsFromDi,
-  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 
-import { routes } from './app.routes';
-
 import {
+  BrowserCacheLocation,
+  InteractionType,
   IPublicClientApplication,
   PublicClientApplication,
-  InteractionType,
-  BrowserCacheLocation,
 } from '@azure/msal-browser';
 
 import {
-  MsalGuard,
-  MsalInterceptor,
-  MSAL_INSTANCE,
   MSAL_GUARD_CONFIG,
+  MSAL_INSTANCE,
   MSAL_INTERCEPTOR_CONFIG,
+  MsalBroadcastService,
+  MsalGuard,
   MsalGuardConfiguration,
+  MsalInterceptor,
   MsalInterceptorConfiguration,
   MsalService,
-  MsalBroadcastService,
 } from '@azure/msal-angular';
+
+import { routes } from './app.routes';
 import { environment } from '../environments/environments';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
-      authority: 'https://login.microsoftonline.com/6e49fdba-8435-41ac-8074-7b1a04cfd543',
-      redirectUri: 'http://localhost:4200',
-      postLogoutRedirectUri: 'http://localhost:4200',
+      clientId: environment.azure.clientId,
+      authority: environment.azure.authority,
+      redirectUri: environment.azure.redirectUri,
+      postLogoutRedirectUri: environment.azure.postLogoutRedirectUri,
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -52,7 +51,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: [...environment.azure.protectedResourceScopes],
+      scopes: [...environment.azure.apiScopes],
     },
   };
 }
@@ -60,11 +59,11 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string> | null>();
 
-  protectedResourceMap.set('https://graph.microsoft.com/v1.0/me', ['user.read']);
-  protectedResourceMap.set(
-    environment.apiBaseUrl + '/api',
-    environment.azure.protectedResourceScopes
-  );
+  // El interceptor hace match por prefijo de URL.
+  // En EP2 apiBaseUrl pasa a ser la URL del API Gateway.
+  protectedResourceMap.set(`${environment.apiBaseUrl}/api`, [
+    ...environment.azure.apiScopes,
+  ]);
 
   return { interactionType: InteractionType.Redirect, protectedResourceMap };
 }
@@ -73,36 +72,21 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes),
-
     provideHttpClient(withInterceptorsFromDi()),
 
-    {
-      provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory,
-    },
+    { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
 
+    // initialize() y handleRedirectPromise() deben correr sobre la instancia
+    // registrada en el DI, antes del primer render.
     provideAppInitializer(async () => {
       const msalInstance = inject(MSAL_INSTANCE) as IPublicClientApplication;
-
       await msalInstance.initialize();
       await msalInstance.handleRedirectPromise();
     }),
 
-    {
-      provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory,
-    },
-
-    {
-      provide: MSAL_INTERCEPTOR_CONFIG,
-      useFactory: MSALInterceptorConfigFactory,
-    },
-
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true,
-    },
+    { provide: MSAL_GUARD_CONFIG, useFactory: MSALGuardConfigFactory },
+    { provide: MSAL_INTERCEPTOR_CONFIG, useFactory: MSALInterceptorConfigFactory },
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
 
     MsalService,
     MsalGuard,

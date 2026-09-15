@@ -1,28 +1,39 @@
-<header>
-    <h1>Mi Aplicación Angular</h1>
- 
-    <nav>
-        <a routerLink="/">Inicio</a> | 
-        <a routerLink="/profile">Mi Perfil</a>
-    </nav>
- 
-    <div>
-        @if (!isLoggedIn) {
-            <button (click)="login()">Iniciar Sesión</button>
-        } @else {
-            <button (click)="logout()">Cerrar Sesión</button>
-        }
-    </div>
-</header>
- 
-<main>
-    @if (!isLoggedIn) {
-        <section>
-            <h2>Bienvenido</h2>
-            <p>Por favor inicia sesión para acceder a las secciones protegidas.</p>
-        </section>
+<header class="topbar">
+  <h1>DigitalFix</h1>
+
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+
+    @if (auth.isLoggedIn()) {
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+
+      @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.CLIENTE])) {
+        <a routerLink="/workorders" routerLinkActive="active">Órdenes</a>
+      }
+      @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.SUPERVISOR])) {
+        <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
+      }
+      @if (auth.hasAnyRole([ROLES.ADMIN])) {
+        <a routerLink="/reports" routerLinkActive="active">Reportería</a>
+      }
+      @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.AUDITOR])) {
+        <a routerLink="/audit" routerLinkActive="active">Auditoría</a>
+      }
+
+      <a routerLink="/profile" routerLinkActive="active">Mi perfil</a>
     }
- 
-    <!-- Aquí se renderizan las rutas secundarias como /profile -->
-    <router-outlet></router-outlet>
+  </nav>
+
+  <div class="session">
+    @if (auth.isLoggedIn()) {
+      <span>{{ auth.displayName() }}</span>
+      <button type="button" (click)="auth.logout()">Cerrar sesión</button>
+    } @else {
+      <button type="button" (click)="auth.login()">Iniciar sesión con Microsoft</button>
+    }
+  </div>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
 </main>
