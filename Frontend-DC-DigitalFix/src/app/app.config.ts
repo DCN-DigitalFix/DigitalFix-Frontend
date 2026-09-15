@@ -61,7 +61,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   // El interceptor hace match por prefijo de URL.
   // En EP2 apiBaseUrl pasa a ser la URL del API Gateway.
-  protectedResourceMap.set(`${environment.apiBaseUrl}/api`, [
+  protectedResourceMap.set(`${environment.apiBaseUrl}/api/*`, [
     ...environment.azure.apiScopes,
   ]);
 
