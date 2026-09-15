@@ -7,37 +7,37 @@ export const environment = {
   production: false,
 
   azure: {
-    // App Registration de la SPA (plataforma "SPA", redirect http://localhost:4200)
-    clientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
+    // App Registration de la SPA "frontend"
+    clientId: '74966acc-6d78-4632-b650-b92f1c792bf9',
 
-    // Tenant de Entra ID
-    tenantId: '6e49fdba-8435-41ac-8074-7b1a04cfd543',
-    authority: 'https://login.microsoftonline.com/6e49fdba-8435-41ac-8074-7b1a04cfd543',
+    // Tenant gozalo23
+    tenantId: 'a6a0c27e-18a7-4209-bd1b-32338be5cb66',
+    authority: 'https://login.microsoftonline.com/a6a0c27e-18a7-4209-bd1b-32338be5cb66',
 
     redirectUri: 'http://localhost:4200',
     postLogoutRedirectUri: 'http://localhost:4200',
 
-    /**
-     * App Registration de la API (registro DISTINTO al de la SPA).
-     * Mientras no lo separes, deja aquí el mismo GUID de arriba.
-     */
-    apiClientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
+    // App Registration de la API "DigitalFix_api_backend"
+    apiClientId: '8e5e408b-c101-4bc1-a5d3-01f702720462',
 
-    /** Scopes delegados expuestos por la API y consentidos por la SPA. */
+    // Claim "aud" que llevara el access token
+    apiAudience: 'api://8e5e408b-c101-4bc1-a5d3-01f702720462',
+
+    // Scopes delegados expuestos por la API
     apiScopes: [
-      'api://3925d7ba-75af-4c56-ad08-fc0c999298fb/OT.Read',
-      'api://3925d7ba-75af-4c56-ad08-fc0c999298fb/OT.Create',
+      'api://8e5e408b-c101-4bc1-a5d3-01f702720462/OT.Read',
+      'api://8e5e408b-c101-4bc1-a5d3-01f702720462/OT.Create',
     ],
   },
 
-  /**
-   * Base de las llamadas al backend.
-   * EP1: apunta al BFF local.  EP2: reemplazar por la URL del API Gateway.
-   */
+  // EP1: BFF local. EP2: reemplazar por la URL del API Gateway.
   apiBaseUrl: 'http://localhost:8080',
 };
 
-/** App Roles definidos en el App Registration (claim "roles" del token). */
+/**
+ * App Roles definidos en el registro de la API.
+ * Llegan en el claim "roles" del ACCESS TOKEN, no del ID token.
+ */
 export const ROLES = {
   ADMIN: 'Admin',
   SUPERVISOR: 'Supervisor',
