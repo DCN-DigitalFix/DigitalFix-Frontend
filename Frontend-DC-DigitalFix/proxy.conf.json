@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://z0ypqr9aha.execute-api.us-east-1.amazonaws.com",
+    "target": "https://9gjnkoki0m.execute-api.us-east-1.amazonaws.com",
     "secure": true,
     "changeOrigin": true
   }

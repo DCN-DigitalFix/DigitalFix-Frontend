@@ -1,9 +1,7 @@
 /**
  * Configuración única de la aplicación.
- * 
  *
- * OJO: esta configuración apunta al tenant de Jesus.
- * La entrega final va contra el tenant gozalo23:
+ * Esta configuración apunta al tenant gozalo23:
  *   clientId    74966acc-6d78-4632-b650-b92f1c792bf9
  *   tenantId    a6a0c27e-18a7-4209-bd1b-32338be5cb66
  *   apiClientId 8e5e408b-c101-4bc1-a5d3-01f702720462
@@ -12,37 +10,38 @@ export const environment = {
   production: false,
 
   azure: {
-    // App Registration de la SPA "DigitalFix-Frontend"
-    clientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
+    // App Registration de la SPA "frontend"
+    clientId: '74966acc-6d78-4632-b650-b92f1c792bf9',
 
-    // Tenant appdemo1945
-    tenantId: '6e49fdba-8435-41ac-8074-7b1a04cfd543',
-    authority: 'https://login.microsoftonline.com/6e49fdba-8435-41ac-8074-7b1a04cfd543',
+    // Tenant gozalo23
+    tenantId: 'a6a0c27e-18a7-4209-bd1b-32338be5cb66',
+    authority: 'https://login.microsoftonline.com/a6a0c27e-18a7-4209-bd1b-32338be5cb66',
 
-    //redirectUri: 'http://localhost:4200',
-    //postLogoutRedirectUri: 'http://localhost:4200',
+    // Se resuelve en tiempo de ejecucion segun donde corra la app:
+    //   en local          -> http://localhost:4200
+    //   en la EC2 (nginx) -> https://44.206.195.117
+    // Ambas URI deben estar registradas en el App Registration.
+    // Azure no acepta http salvo localhost, por eso la EC2 va por https con nginx.
+    redirectUri: window.location.origin,
+    postLogoutRedirectUri: window.location.origin,
 
-
-    //Esto era para la EC2 pero hubo problemas debido al http, azure no lo tolera por ende la opcion es usar https a traves de nginx
-    redirectUri: 'https://54.243.57.27',
-    postLogoutRedirectUri: 'https://54.243.57.27',
-
-    // App Registration de la API "DigitalFix-API"
-    apiClientId: '13a645a9-ea0e-498e-96b8-55a3d56f10eb',
+    // App Registration de la API "DigitalFix_api_backend"
+    apiClientId: '8e5e408b-c101-4bc1-a5d3-01f702720462',
 
     // Claim "aud" que llevara el access token
-    apiAudience: 'api://13a645a9-ea0e-498e-96b8-55a3d56f10eb',
+    apiAudience: 'api://8e5e408b-c101-4bc1-a5d3-01f702720462',
 
     // Scopes delegados expuestos por la API
     apiScopes: [
-      'api://13a645a9-ea0e-498e-96b8-55a3d56f10eb/OT.Read',
-      'api://13a645a9-ea0e-498e-96b8-55a3d56f10eb/OT.Create',
+      'api://8e5e408b-c101-4bc1-a5d3-01f702720462/OT.Read',
+      'api://8e5e408b-c101-4bc1-a5d3-01f702720462/OT.Create',
     ],
   },
 
-  // EP1: BFF local. EP2: reemplazar por la URL del API Gateway.
+  // EP1: BFF local. EP2: vacio a proposito — las llamadas salen relativas
+  // y nginx las intercepta en /api/ y las reenvia al API Gateway.
   // apiBaseUrl: 'http://localhost:8080',
-   apiBaseUrl: '',
+  apiBaseUrl: '',
 };
 
 /**
