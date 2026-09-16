@@ -13,6 +13,8 @@ import { ROLES } from '../../environments/environments';
       <p>Vista Supervisor: órdenes por asignar y cuadrillas en terreno.</p>
     } @else if (auth.hasAnyRole([ROLES.CLIENTE])) {
       <p>Vista Cliente: últimas órdenes y su estado.</p>
+    } @else if (auth.hasAnyRole([ROLES.AUDITOR])) {
+      <p>Vista Auditor: trazabilidad de órdenes, solo lectura.</p>
     } @else {
       <p>Tu cuenta aún no tiene un rol asignado en DigitalFix.</p>
     }

@@ -1,8 +1,8 @@
 /**
  * Configuración única de la aplicación.
- * NO contiene secretos: clientId y tenantId son identificadores públicos.
+ * 
  *
- * OJO: esta configuración apunta al tenant appdemo1945 (entorno de Jesus).
+ * OJO: esta configuración apunta al tenant de Jesus.
  * La entrega final va contra el tenant gozalo23:
  *   clientId    74966acc-6d78-4632-b650-b92f1c792bf9
  *   tenantId    a6a0c27e-18a7-4209-bd1b-32338be5cb66
@@ -19,8 +19,13 @@ export const environment = {
     tenantId: '6e49fdba-8435-41ac-8074-7b1a04cfd543',
     authority: 'https://login.microsoftonline.com/6e49fdba-8435-41ac-8074-7b1a04cfd543',
 
-    redirectUri: 'http://localhost:4200',
-    postLogoutRedirectUri: 'http://localhost:4200',
+    //redirectUri: 'http://localhost:4200',
+    //postLogoutRedirectUri: 'http://localhost:4200',
+
+
+    //Esto era para la EC2 pero hubo problemas debido al http, azure no lo tolera por ende la opcion es usar https a traves de nginx
+    redirectUri: 'https://54.243.57.27',
+    postLogoutRedirectUri: 'https://54.243.57.27',
 
     // App Registration de la API "DigitalFix-API"
     apiClientId: '13a645a9-ea0e-498e-96b8-55a3d56f10eb',
@@ -36,7 +41,8 @@ export const environment = {
   },
 
   // EP1: BFF local. EP2: reemplazar por la URL del API Gateway.
-  apiBaseUrl: 'http://localhost:8080',
+  // apiBaseUrl: 'http://localhost:8080',
+   apiBaseUrl: '',
 };
 
 /**

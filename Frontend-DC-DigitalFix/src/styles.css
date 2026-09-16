@@ -1,1 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+	--bg: #0a0a0a;
+	--surface: #141414;
+	--surface-alt: #1c1c1c;
+	--border: #2e2e2e;
+	--border-fuerte: #4a4a4a;
+	--text: #e8e8e8;
+	--text-dim: #8a8a8a;
+	--text-faint: #5a5a5a;
+	--ambar: #ffb000;
+	--verde: #00d96a;
+	--rojo: #ff4d3d;
+	--cyan: #00c8e0;
+	--mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+	--sans: 'Inter', system-ui, sans-serif;
+	--t-xs: 11px;
+	--t-sm: 13px;
+	--t-base: 14px;
+	--t-lg: 18px;
+	--t-xl: 24px;
+	--radius: 2px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--sans);
+	font-size: var(--t-base);
+}
+
+button,
+input,
+select {
+	font: inherit;
+}
