@@ -1,7 +1,0 @@
-{
-  "/api": {
-    "target": "https://9gjnkoki0m.execute-api.us-east-1.amazonaws.com",
-    "secure": true,
-    "changeOrigin": true
-  }
-}
