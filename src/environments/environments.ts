@@ -11,11 +11,20 @@ export const environment = {
 
   azure: {
     // App Registration de la SPA "frontend"
-    clientId: '74966acc-6d78-4632-b650-b92f1c792bf9',
+    // clientId: '74966acc-6d78-4632-b650-b92f1c792bf9',
 
     // Tenant gozalo23
-    tenantId: 'a6a0c27e-18a7-4209-bd1b-32338be5cb66',
-    authority: 'https://login.microsoftonline.com/a6a0c27e-18a7-4209-bd1b-32338be5cb66',
+    // tenantId: 'a6a0c27e-18a7-4209-bd1b-32338be5cb66',
+    // authority: 'https://login.microsoftonline.com/a6a0c27e-18a7-4209-bd1b-32338be5cb66',
+
+    //jesus
+    clientId: '3925d7ba-75af-4c56-ad08-fc0c999298fb',
+
+    tenantId: '6e49fdba-8435-41ac-8074-7b1a04cfd543',
+    authority: 'https://login.microsoftonline.com/6e49fdba-8435-41ac-8074-7b1a04cfd543',
+
+
+
 
     // Se resuelve en tiempo de ejecucion segun donde corra la app:
     //   en local          -> http://localhost:4200
@@ -26,15 +35,15 @@ export const environment = {
     postLogoutRedirectUri: window.location.origin,
 
     // App Registration de la API "DigitalFix_api_backend"
-    apiClientId: '8e5e408b-c101-4bc1-a5d3-01f702720462',
+    apiClientId: '13a645a9-ea0e-498e-96b8-55a3d56f10eb',
 
     // Claim "aud" que llevara el access token
-    apiAudience: 'api://8e5e408b-c101-4bc1-a5d3-01f702720462',
+    apiAudience: 'api://13a645a9-ea0e-498e-96b8-55a3d56f10eb',
 
     // Scopes delegados expuestos por la API
     apiScopes: [
-      'api://8e5e408b-c101-4bc1-a5d3-01f702720462/OT.Read',
-      'api://8e5e408b-c101-4bc1-a5d3-01f702720462/OT.Create',
+      'api://13a645a9-ea0e-498e-96b8-55a3d56f10eb/OT.Read',
+      'api://13a645a9-ea0e-498e-96b8-55a3d56f10eb/OT.Create',
     ],
   },
 
