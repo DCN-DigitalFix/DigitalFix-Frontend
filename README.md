@@ -91,13 +91,19 @@ Frontend-DC-DigitalFix/
 │       ├── workorders/
 │       │   ├── workorder.model.ts  # WorkOrder, EstadoOT, DTOs
 │       │   └── workorder.service.ts# Cliente HTTP (/api/workorders)
+│       ├── audit/
+│       │   ├── audit.model.ts      # AuditEvent (espeja ms-digitalfix-audit)
+│       │   └── audit.service.ts    # Cliente HTTP (/api/audit)
+│       ├── catalog/
+│       │   ├── catalog.model.ts    # Servicio, Repuesto, DTOs (espeja ms-digitalfix-catalog)
+│       │   └── catalog.service.ts  # Cliente HTTP (/api/catalog)
 │       ├── pages/
 │       │   ├── home.ts             # Pública
 │       │   ├── dashboard.ts        # Mensaje adaptado por rol
-│       │   ├── workorders.ts       # CRUD completo — única pantalla con datos
-│       │   ├── catalog.ts          # Placeholder
-│       │   ├── reports.ts          # Placeholder
-│       │   ├── audit.ts            # Placeholder
+│       │   ├── workorders.ts       # CRUD completo
+│       │   ├── catalog.ts          # Servicios y repuestos, con descuento de stock
+│       │   ├── reports.ts          # Placeholder (depende de ms-digitalfix-report)
+│       │   ├── audit.ts            # Timeline de eventos y búsqueda por orden
 │       │   └── forbidden.ts        # 403
 │       └── profile/
 │           └── profile.ts          # Perfil del usuario autenticado
@@ -371,12 +377,16 @@ Al probar, recargar con `Ctrl+Shift+R` o usar una ventana de incógnito: el `ind
 - Lectura de roles y scopes desde el access token
 - Guard de autorización por rol y menú adaptado
 - CRUD completo de órdenes de trabajo contra el API Gateway
-- Manejo de errores 401 y 403 con mensajes legibles en pantalla
+- Auditoría: tabla de últimos eventos, búsqueda de línea de tiempo por orden
+  y refresco automático opcional, vía ms-digitalfix-audit (solo lectura)
+- Catálogo: servicios y repuestos con stock, alta de ambos y descuento de
+  stock con mensaje legible cuando no alcanza, vía ms-digitalfix-catalog
+- Manejo de errores 401, 403 y 409 con mensajes legibles en pantalla
 - Despliegue en EC2 con nginx y HTTPS
 
 **Pendiente:**
 
-- Catálogo, Reportería y Auditoría son placeholders sin datos
+- Reportería sigue siendo un placeholder: depende de ms-digitalfix-report
 - El BFF almacena las órdenes **en memoria**: se pierden al reiniciarlo
 - Autorregistro de usuarios (hoy las cuentas las crea el administrador del tenant)
 - Microservicios de dominio con persistencia real
