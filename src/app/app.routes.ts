@@ -34,6 +34,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/audit').then((m) => m.Audit),
   },
   {
+    path: 'kafka-admin',
+    canActivate: [MsalGuard, roleGuard(ROLES.ADMIN)],
+    loadComponent: () => import('./pages/kafka-admin').then((m) => m.KafkaAdmin),
+  },
+  {
     path: 'profile',
     canActivate: [MsalGuard],
     loadComponent: () => import('./profile/profile').then((m) => m.Profile),

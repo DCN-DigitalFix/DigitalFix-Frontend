@@ -19,6 +19,9 @@
       @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.AUDITOR])) {
         <a routerLink="/audit" routerLinkActive="active">Auditoría</a>
       }
+      @if (auth.hasAnyRole([ROLES.ADMIN])) {
+        <a routerLink="/kafka-admin" routerLinkActive="active">Kafka</a>
+      }
 
       <a routerLink="/profile" routerLinkActive="active">Mi perfil</a>
     }
