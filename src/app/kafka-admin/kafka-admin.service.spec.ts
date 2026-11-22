@@ -53,7 +53,7 @@ describe('KafkaAdminService', () => {
   it('lista topicos', async () => {
     const promesa = service.listarTopicos();
 
-    const req = httpMock.expectOne('/api/kafka/topics');
+    const req = httpMock.expectOne('/api/v1/kafka/topics');
     expect(req.request.method).toBe('GET');
     req.flush([TOPICO_EJEMPLO]);
 
@@ -63,7 +63,7 @@ describe('KafkaAdminService', () => {
   it('crea un topico con POST', async () => {
     const promesa = service.crearTopico({ nombre: 'nuevo.topico', particiones: 3, factorReplicacion: 3 });
 
-    const req = httpMock.expectOne('/api/kafka/topics');
+    const req = httpMock.expectOne('/api/v1/kafka/topics');
     expect(req.request.method).toBe('POST');
     req.flush(TOPICO_EJEMPLO);
 
@@ -73,7 +73,7 @@ describe('KafkaAdminService', () => {
   it('amplia particiones con PUT', async () => {
     const promesa = service.ampliarParticiones('digitalfix.workorders.events', 6);
 
-    const req = httpMock.expectOne('/api/kafka/topics/digitalfix.workorders.events/partitions');
+    const req = httpMock.expectOne('/api/v1/kafka/topics/digitalfix.workorders.events/partitions');
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual({ particiones: 6 });
     req.flush(null);
@@ -84,7 +84,7 @@ describe('KafkaAdminService', () => {
   it('elimina un topico y propaga un 409 si esta protegido', async () => {
     const promesa = service.eliminarTopico('digitalfix.workorders.events');
 
-    const req = httpMock.expectOne('/api/kafka/topics/digitalfix.workorders.events');
+    const req = httpMock.expectOne('/api/v1/kafka/topics/digitalfix.workorders.events');
     expect(req.request.method).toBe('DELETE');
     req.flush(
       { message: "'digitalfix.workorders.events' es un topico protegido" },
@@ -97,7 +97,7 @@ describe('KafkaAdminService', () => {
   it('lista consumer groups', async () => {
     const promesa = service.listarConsumerGroups();
 
-    const req = httpMock.expectOne('/api/kafka/consumer-groups');
+    const req = httpMock.expectOne('/api/v1/kafka/consumer-groups');
     req.flush([GRUPO_EJEMPLO]);
 
     await expect(promesa).resolves.toEqual([GRUPO_EJEMPLO]);
@@ -106,7 +106,7 @@ describe('KafkaAdminService', () => {
   it('obtiene el detalle de un consumer group con sus offsets', async () => {
     const promesa = service.obtenerConsumerGroup('audit-timeline');
 
-    const req = httpMock.expectOne('/api/kafka/consumer-groups/audit-timeline');
+    const req = httpMock.expectOne('/api/v1/kafka/consumer-groups/audit-timeline');
     req.flush(DETALLE_EJEMPLO);
 
     await expect(promesa).resolves.toEqual(DETALLE_EJEMPLO);
@@ -115,7 +115,7 @@ describe('KafkaAdminService', () => {
   it('obtiene el estado del cluster', async () => {
     const promesa = service.obtenerCluster();
 
-    const req = httpMock.expectOne('/api/kafka/cluster');
+    const req = httpMock.expectOne('/api/v1/kafka/cluster');
     req.flush(CLUSTER_EJEMPLO);
 
     await expect(promesa).resolves.toEqual(CLUSTER_EJEMPLO);

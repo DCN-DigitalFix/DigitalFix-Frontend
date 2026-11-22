@@ -65,7 +65,7 @@ El token se valida **dos veces**, en el Gateway y en el BFF. Es deliberado: el G
 
 ### El frontend nunca llama al BFF directamente
 
-En producción, `apiBaseUrl` es una cadena vacía: las peticiones salen relativas (`/api/workorders`) y nginx las reenvía al API Gateway. Para el navegador todo es el mismo origen, así que no hay CORS de por medio.
+En producción, `apiBaseUrl` es una cadena vacía: las peticiones salen relativas (`/api/v1/workorders`) y nginx las reenvía al API Gateway. Para el navegador todo es el mismo origen, así que no hay CORS de por medio.
 
 En desarrollo local, `proxy.conf.json` cumple exactamente esa misma función, de modo que el entorno local se comporta igual que el desplegado.
 
@@ -90,13 +90,13 @@ Frontend-DC-DigitalFix/
 │       │   └── role-guard.ts       # Guard funcional de autorización por rol
 │       ├── workorders/
 │       │   ├── workorder.model.ts  # WorkOrder, EstadoOT, DTOs
-│       │   └── workorder.service.ts# Cliente HTTP (/api/workorders)
+│       │   └── workorder.service.ts# Cliente HTTP (/api/v1/workorders)
 │       ├── audit/
 │       │   ├── audit.model.ts      # AuditEvent (espeja ms-digitalfix-audit)
-│       │   └── audit.service.ts    # Cliente HTTP (/api/audit)
+│       │   └── audit.service.ts    # Cliente HTTP (/api/v1/audit)
 │       ├── catalog/
 │       │   ├── catalog.model.ts    # Servicio, Repuesto, DTOs (espeja ms-digitalfix-catalog)
-│       │   └── catalog.service.ts  # Cliente HTTP (/api/catalog)
+│       │   └── catalog.service.ts  # Cliente HTTP (/api/v1/catalog)
 │       ├── pages/
 │       │   ├── home.ts             # Pública
 │       │   ├── dashboard.ts        # Mensaje adaptado por rol
@@ -205,7 +205,7 @@ protectedResourceMap.set(`${environment.apiBaseUrl}/api/*`, [
 ]);
 ```
 
-Sin el comodín, MSAL no hace match con `/api/workorders` y la petición sale **sin el header `Authorization`**, sin lanzar ningún error. El síntoma aparece del otro lado como un 401 que parece problema del backend.
+Sin el comodín, MSAL no hace match con `/api/v1/workorders` y la petición sale **sin el header `Authorization`**, sin lanzar ningún error. El síntoma aparece del otro lado como un 401 que parece problema del backend.
 
 > ⚠️ **No subir credenciales reales al repositorio.** Los identificadores de Entra ID no son secretos, pero el archivo cambia según el tenant y subirlo con los valores de un entorno de pruebas rompe el del resto del equipo.
 

@@ -57,8 +57,8 @@ describe('Catalog (página)', () => {
   /** El constructor dispara las dos cargas (servicios y repuestos) a la vez. */
   function crearYResponder(): ReturnType<typeof TestBed.createComponent<Catalog>> {
     const fixture = TestBed.createComponent(Catalog);
-    httpMock.expectOne((r) => r.url === '/api/catalog/services').flush([SERVICIO_EJEMPLO]);
-    httpMock.expectOne((r) => r.url === '/api/catalog/repuestos').flush([REPUESTO_EJEMPLO]);
+    httpMock.expectOne((r) => r.url === '/api/v1/catalog/services').flush([SERVICIO_EJEMPLO]);
+    httpMock.expectOne((r) => r.url === '/api/v1/catalog/repuestos').flush([REPUESTO_EJEMPLO]);
     return fixture;
   }
 
@@ -78,7 +78,7 @@ describe('Catalog (página)', () => {
     fixture.componentInstance.cantidadesDescuento['RP-001'] = 999;
     const promesa = fixture.componentInstance.descontarStock(REPUESTO_EJEMPLO);
 
-    const req = httpMock.expectOne('/api/catalog/repuestos/RP-001/descontar');
+    const req = httpMock.expectOne('/api/v1/catalog/repuestos/RP-001/descontar');
     req.flush(
       { message: 'Stock insuficiente de RP-001: hay 5, se requieren 999' },
       { status: 409, statusText: 'Conflict' }
@@ -97,7 +97,7 @@ describe('Catalog (página)', () => {
     fixture.componentInstance.cantidadesDescuento['RP-001'] = 0;
     await fixture.componentInstance.descontarStock(REPUESTO_EJEMPLO);
 
-    httpMock.expectNone('/api/catalog/repuestos/RP-001/descontar');
+    httpMock.expectNone('/api/v1/catalog/repuestos/RP-001/descontar');
     expect(fixture.componentInstance.error()).toContain('cantidad');
   });
 });

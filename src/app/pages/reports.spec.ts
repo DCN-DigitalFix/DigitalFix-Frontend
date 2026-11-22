@@ -33,7 +33,7 @@ describe('Reports (página)', () => {
   it('carga el resumen al crearse', async () => {
     const fixture = TestBed.createComponent(Reports);
 
-    const req = httpMock.expectOne('/api/reports/summary');
+    const req = httpMock.expectOne('/api/v1/reports/summary');
     req.flush(RESUMEN_EJEMPLO);
     await fixture.whenStable();
 
@@ -44,7 +44,7 @@ describe('Reports (página)', () => {
   it('muestra un mensaje legible si el BFF responde 403', async () => {
     const fixture = TestBed.createComponent(Reports);
 
-    const req = httpMock.expectOne('/api/reports/summary');
+    const req = httpMock.expectOne('/api/v1/reports/summary');
     req.flush({ message: 'sin permiso' }, { status: 403, statusText: 'Forbidden' });
     await fixture.whenStable();
 
@@ -53,7 +53,7 @@ describe('Reports (página)', () => {
 
   it('no busca un certificado si no se ingresa un id de orden', async () => {
     const fixture = TestBed.createComponent(Reports);
-    httpMock.expectOne('/api/reports/summary').flush(RESUMEN_EJEMPLO);
+    httpMock.expectOne('/api/v1/reports/summary').flush(RESUMEN_EJEMPLO);
     await fixture.whenStable();
 
     fixture.componentInstance.ordenBuscada = '  ';
@@ -65,13 +65,13 @@ describe('Reports (página)', () => {
 
   it('muestra 409 con un mensaje legible si la orden no esta cerrada', async () => {
     const fixture = TestBed.createComponent(Reports);
-    httpMock.expectOne('/api/reports/summary').flush(RESUMEN_EJEMPLO);
+    httpMock.expectOne('/api/v1/reports/summary').flush(RESUMEN_EJEMPLO);
     await fixture.whenStable();
 
     fixture.componentInstance.ordenBuscada = 'OT-0002';
     const promesa = fixture.componentInstance.buscarCertificado();
 
-    const req = httpMock.expectOne('/api/reports/orders/OT-0002/certificate');
+    const req = httpMock.expectOne('/api/v1/reports/orders/OT-0002/certificate');
     req.flush({ message: 'La orden OT-0002 aun no esta cerrada' }, { status: 409, statusText: 'Conflict' });
     await promesa;
 

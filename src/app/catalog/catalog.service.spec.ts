@@ -43,7 +43,7 @@ describe('CatalogService', () => {
   it('lista servicios pasando soloActivos como query param', async () => {
     const promesa = service.listarServicios(true);
 
-    const req = httpMock.expectOne((r) => r.url === '/api/catalog/services');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/catalog/services');
     expect(req.request.method).toBe('GET');
     expect(req.request.params.get('soloActivos')).toBe('true');
     req.flush([SERVICIO_EJEMPLO]);
@@ -58,7 +58,7 @@ describe('CatalogService', () => {
       tarifa: 25000,
     });
 
-    const req = httpMock.expectOne('/api/catalog/services');
+    const req = httpMock.expectOne('/api/v1/catalog/services');
     expect(req.request.method).toBe('POST');
     req.flush(SERVICIO_EJEMPLO);
 
@@ -68,7 +68,7 @@ describe('CatalogService', () => {
   it('lista repuestos', async () => {
     const promesa = service.listarRepuestos();
 
-    const req = httpMock.expectOne('/api/catalog/repuestos');
+    const req = httpMock.expectOne('/api/v1/catalog/repuestos');
     expect(req.request.method).toBe('GET');
     req.flush([REPUESTO_EJEMPLO]);
 
@@ -78,7 +78,7 @@ describe('CatalogService', () => {
   it('descuenta stock con POST al codigo del repuesto', async () => {
     const promesa = service.descontarStock('RP-001', { cantidad: 2 });
 
-    const req = httpMock.expectOne('/api/catalog/repuestos/RP-001/descontar');
+    const req = httpMock.expectOne('/api/v1/catalog/repuestos/RP-001/descontar');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ cantidad: 2 });
     req.flush({ ...REPUESTO_EJEMPLO, stock: 3 });
@@ -89,7 +89,7 @@ describe('CatalogService', () => {
   it('propaga un 409 con el mensaje cuando el stock no alcanza', async () => {
     const promesa = service.descontarStock('RP-001', { cantidad: 999 });
 
-    const req = httpMock.expectOne('/api/catalog/repuestos/RP-001/descontar');
+    const req = httpMock.expectOne('/api/v1/catalog/repuestos/RP-001/descontar');
     req.flush(
       { message: 'Stock insuficiente de RP-001: hay 5, se requieren 999' },
       { status: 409, statusText: 'Conflict' }

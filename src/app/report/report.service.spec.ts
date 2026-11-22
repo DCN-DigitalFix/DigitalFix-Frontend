@@ -43,7 +43,7 @@ describe('ReportService', () => {
   it('obtiene el resumen', async () => {
     const promesa = service.resumen();
 
-    const req = httpMock.expectOne('/api/reports/summary');
+    const req = httpMock.expectOne('/api/v1/reports/summary');
     expect(req.request.method).toBe('GET');
     req.flush(RESUMEN_EJEMPLO);
 
@@ -53,7 +53,7 @@ describe('ReportService', () => {
   it('obtiene el certificado de una orden', async () => {
     const promesa = service.certificado('OT-0001');
 
-    const req = httpMock.expectOne('/api/reports/orders/OT-0001/certificate');
+    const req = httpMock.expectOne('/api/v1/reports/orders/OT-0001/certificate');
     expect(req.request.method).toBe('GET');
     req.flush(CERTIFICADO_EJEMPLO);
 
@@ -63,7 +63,7 @@ describe('ReportService', () => {
   it('propaga un 409 cuando la orden no esta cerrada', async () => {
     const promesa = service.certificado('OT-0002');
 
-    const req = httpMock.expectOne('/api/reports/orders/OT-0002/certificate');
+    const req = httpMock.expectOne('/api/v1/reports/orders/OT-0002/certificate');
     req.flush(
       { message: 'La orden OT-0002 aun no esta cerrada' },
       { status: 409, statusText: 'Conflict' }

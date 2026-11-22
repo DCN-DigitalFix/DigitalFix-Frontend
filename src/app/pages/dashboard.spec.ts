@@ -39,7 +39,7 @@ describe('Dashboard (página)', () => {
     configurar([ROLES.ADMIN]);
     const fixture = TestBed.createComponent(Dashboard);
 
-    const req = httpMock.expectOne('/api/reports/summary');
+    const req = httpMock.expectOne('/api/v1/reports/summary');
     req.flush({ ordenesPorEstado: { CERRADA: 2 }, total: 2, tiempoPromedioCierreHoras: 10, totalEventosAuditoria: 4 });
     await fixture.whenStable();
 
@@ -50,7 +50,7 @@ describe('Dashboard (página)', () => {
     configurar([ROLES.AUDITOR]);
     const fixture = TestBed.createComponent(Dashboard);
 
-    const req = httpMock.expectOne((r) => r.url === '/api/audit/events');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/audit/events');
     req.flush([]);
     await fixture.whenStable();
 
@@ -61,7 +61,7 @@ describe('Dashboard (página)', () => {
     configurar([ROLES.SUPERVISOR]);
     const fixture = TestBed.createComponent(Dashboard);
 
-    const req = httpMock.expectOne('/api/workorders');
+    const req = httpMock.expectOne('/api/v1/workorders');
     req.flush([]);
     await fixture.whenStable();
 

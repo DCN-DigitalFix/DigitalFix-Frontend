@@ -40,7 +40,7 @@ describe('AuditService', () => {
   it('lista los ultimos eventos pasando el limite como query param', async () => {
     const promesa = service.listarUltimos(50);
 
-    const req = httpMock.expectOne((r) => r.url === '/api/audit/events');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/audit/events');
     expect(req.request.method).toBe('GET');
     expect(req.request.params.get('limite')).toBe('50');
     req.flush([EVENTO_EJEMPLO]);
@@ -51,7 +51,7 @@ describe('AuditService', () => {
   it('busca la linea de tiempo de una orden', async () => {
     const promesa = service.timelineDeOrden('OT-0001');
 
-    const req = httpMock.expectOne('/api/audit/orders/OT-0001/timeline');
+    const req = httpMock.expectOne('/api/v1/audit/orders/OT-0001/timeline');
     expect(req.request.method).toBe('GET');
     req.flush([EVENTO_EJEMPLO]);
 
@@ -61,7 +61,7 @@ describe('AuditService', () => {
   it('propaga un 404 cuando la orden no tiene eventos registrados', async () => {
     const promesa = service.timelineDeOrden('OT-9999');
 
-    const req = httpMock.expectOne('/api/audit/orders/OT-9999/timeline');
+    const req = httpMock.expectOne('/api/v1/audit/orders/OT-9999/timeline');
     req.flush(
       { message: 'No hay eventos de auditoria para la orden OT-9999' },
       { status: 404, statusText: 'Not Found' }

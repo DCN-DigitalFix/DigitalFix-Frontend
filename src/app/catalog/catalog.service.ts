@@ -14,14 +14,14 @@ import {
 /**
  * Cliente HTTP del BFF para catalogo (ms-digitalfix-catalog).
  *
- * El BFF expone /api/catalog/... como contrato propio hacia el frontend,
- * aunque internamente reenvie a /api/v1/catalog/... en el microservicio real.
+ * El BFF expone /api/v1/catalog/... y lo reenvia tal cual al mismo path en
+ * el microservicio real (los dos quedaron versionados a la vez).
  * No agrega el header Authorization: de eso se encarga MsalInterceptor.
  */
 @Injectable({ providedIn: 'root' })
 export class CatalogService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/api/catalog`;
+  private base = `${environment.apiBaseUrl}/api/v1/catalog`;
 
   // --- Servicios ---------------------------------------------------------
 

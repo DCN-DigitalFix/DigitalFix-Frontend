@@ -12,7 +12,7 @@ import { Certificate, ReportSummary } from './report.model';
 @Injectable({ providedIn: 'root' })
 export class ReportService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/api/reports`;
+  private base = `${environment.apiBaseUrl}/api/v1/reports`;
 
   resumen(): Promise<ReportSummary> {
     return firstValueFrom(this.http.get<ReportSummary>(`${this.base}/summary`));

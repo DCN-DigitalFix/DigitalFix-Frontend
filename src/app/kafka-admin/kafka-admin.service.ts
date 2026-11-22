@@ -18,7 +18,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class KafkaAdminService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/api/kafka`;
+  private base = `${environment.apiBaseUrl}/api/v1/kafka`;
 
   listarTopicos(): Promise<Topico[]> {
     return firstValueFrom(this.http.get<Topico[]>(`${this.base}/topics`));

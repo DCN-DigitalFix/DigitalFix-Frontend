@@ -14,7 +14,7 @@ import { AuditEvent } from './audit.model';
 @Injectable({ providedIn: 'root' })
 export class AuditService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/api/audit`;
+  private base = `${environment.apiBaseUrl}/api/v1/audit`;
 
   /** Ultimos eventos registrados, mas reciente primero. */
   listarUltimos(limite = 50): Promise<AuditEvent[]> {

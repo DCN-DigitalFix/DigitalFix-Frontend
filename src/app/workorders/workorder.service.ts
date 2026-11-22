@@ -19,7 +19,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class WorkOrderService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/api/workorders`;
+  private base = `${environment.apiBaseUrl}/api/v1/workorders`;
 
   listar(): Promise<WorkOrder[]> {
     return firstValueFrom(this.http.get<WorkOrder[]>(this.base));
