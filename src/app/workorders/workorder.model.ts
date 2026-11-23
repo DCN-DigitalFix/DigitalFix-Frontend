@@ -25,6 +25,8 @@ export interface WorkOrder {
   creadaPor: string;
   creadaEn: string;
   actualizadaEn: string;
+  codigoRepuesto: string | null;
+  cantidadRepuesto: number | null;
 }
 
 export interface CrearWorkOrderRequest {
@@ -36,4 +38,6 @@ export interface CrearWorkOrderRequest {
 export interface CambiarEstadoRequest {
   estado: EstadoOT;
   tecnicoAsignado?: string | null;
+  codigoRepuesto?: string | null;
+  cantidadRepuesto?: number | null;
 }

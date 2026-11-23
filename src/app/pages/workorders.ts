@@ -40,6 +40,7 @@ import { WorkOrderService } from '../workorders/workorder.service';
           <th>Dirección</th>
           <th>Estado</th>
           <th>Técnico</th>
+          <th>Repuesto</th>
           @if (puedeGestionar()) { <th>Acciones</th> }
         </tr>
       </thead>
@@ -52,8 +53,26 @@ import { WorkOrderService } from '../workorders/workorder.service';
             <td>{{ ot.direccion }}</td>
             <td><span class="status" [class]="'status status--' + ot.estado.toLowerCase()">[ {{ ot.estado }} ]</span></td>
             <td class="muted">{{ ot.tecnicoAsignado ?? '—' }}</td>
+            <td class="muted">
+              {{ ot.codigoRepuesto ? ot.codigoRepuesto + ' ×' + ot.cantidadRepuesto : '—' }}
+            </td>
             @if (puedeGestionar()) {
               <td>
+                <!-- Solo en INGRESADA: es el unico estado que puede pasar a
+                     ASIGNADA, que es cuando se descuenta stock. -->
+                @if (ot.estado === 'INGRESADA') {
+                  <input
+                    [(ngModel)]="codigoRepuesto[ot.id]"
+                    placeholder="Repuesto"
+                    class="repuesto"
+                  />
+                  <input
+                    type="number"
+                    [(ngModel)]="cantidadRepuesto[ot.id]"
+                    placeholder="Cant."
+                    class="cantidad"
+                  />
+                }
                 <select
                   [ngModel]="ot.estado"
                   (ngModelChange)="cambiarEstado(ot, $event)"
@@ -69,7 +88,7 @@ import { WorkOrderService } from '../workorders/workorder.service';
             }
           </tr>
         } @empty {
-          <tr><td class="empty" [attr.colspan]="puedeGestionar() ? 7 : 6">&gt; sin registros</td></tr>
+          <tr><td class="empty" [attr.colspan]="puedeGestionar() ? 8 : 7">&gt; sin registros</td></tr>
         }
       </tbody>
       </table>
@@ -117,6 +136,8 @@ import { WorkOrderService } from '../workorders/workorder.service';
     input:focus, select:focus { border-color: var(--ambar); outline: 1px solid var(--ambar); }
     input::placeholder { color: var(--text-faint); }
     select { min-width: 145px; }
+    .repuesto { margin-right: 6px; min-width: 110px; }
+    .cantidad { margin-right: 6px; min-width: 70px; }
     .button { background: transparent; border: 1px solid var(--border-fuerte); border-radius: var(--radius); color: var(--text); cursor: pointer; font: var(--t-xs) var(--mono); min-height: 34px; padding: 7px 12px; text-transform: uppercase; }
     .button:hover:not(:disabled) { background: var(--border-fuerte); }
     .button--primary { border-color: var(--ambar); color: var(--ambar); }
@@ -151,6 +172,11 @@ export class WorkOrders {
   cliente = '';
   descripcion = '';
   direccion = '';
+
+  // Indexados por id de orden: cada fila lleva lo suyo. Con un solo par de
+  // campos, todas las filas mostrarian el mismo valor.
+  codigoRepuesto: Record<string, string> = {};
+  cantidadRepuesto: Record<string, number | null> = {};
 
   constructor() {
     void this.cargar();
@@ -198,9 +224,14 @@ export class WorkOrders {
 
     this.error.set(null);
     try {
+      // El repuesto solo viaja al asignar. El '|| null' convierte la cadena
+      // vacia en nulo: sin repuesto, la orden se asigna sin descontar stock,
+      // que es un caso legitimo (una visita de diagnostico, por ejemplo).
       await this.service.cambiarEstado(ot.id, {
         estado,
         tecnicoAsignado: ot.tecnicoAsignado,
+        codigoRepuesto: estado === 'ASIGNADA' ? (this.codigoRepuesto[ot.id] || null) : null,
+        cantidadRepuesto: estado === 'ASIGNADA' ? (this.cantidadRepuesto[ot.id] ?? null) : null,
       });
       await this.cargar();
     } catch (e) {
