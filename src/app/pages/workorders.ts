@@ -235,8 +235,9 @@ export class WorkOrders {
       });
       await this.cargar();
     } catch (e) {
-      this.reportar(e);
       await this.cargar();
+      this.reportar(e);
+      
     }
   }
 
@@ -250,10 +251,30 @@ export class WorkOrders {
     }
   }
 
+  /**
+   * El BFF anida el cuerpo completo del servicio de abajo como JSON dentro de
+   * su campo message; si es asi, se extrae el message interno.
+   */
+  private mensajeDe(e: HttpErrorResponse): string {
+    const mensaje = e.error?.message;
+    if (typeof mensaje === 'string' && mensaje.startsWith('{')) {
+      try {
+        const interno = JSON.parse(mensaje);
+        if (typeof interno?.message === 'string') {
+          return interno.message;
+        }
+      } catch {
+        // no era JSON valido: se devuelve el original
+      }
+      return mensaje;
+    }
+    return mensaje ?? e.message;
+  }
+
   /** Traduce el status HTTP a algo legible, util para la demo de EP2. */
   private reportar(e: unknown): void {
     if (e instanceof HttpErrorResponse) {
-      const detalle = e.error?.message ?? e.message;
+      const detalle = this.mensajeDe(e);
       if (e.status === 401) {
         this.error.set(`401 — sesión no válida o token expirado. ${detalle}`);
       } else if (e.status === 403) {
