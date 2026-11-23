@@ -15,7 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'workorders',
-    canActivate: [MsalGuard, roleGuard(ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.CLIENTE)],
+    canActivate: [MsalGuard, roleGuard(ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.CLIENTE, ROLES.AUDITOR)],
     loadComponent: () => import('./pages/workorders').then((m) => m.WorkOrders),
   },
   {
@@ -25,7 +25,7 @@ export const routes: Routes = [
   },
   {
     path: 'reports',
-    canActivate: [MsalGuard, roleGuard(ROLES.ADMIN)],
+    canActivate: [MsalGuard, roleGuard(ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.AUDITOR)],
     loadComponent: () => import('./pages/reports').then((m) => m.Reports),
   },
   {

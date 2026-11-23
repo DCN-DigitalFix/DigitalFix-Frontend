@@ -7,13 +7,13 @@
     @if (auth.isLoggedIn()) {
       <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
 
-      @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.CLIENTE])) {
+      @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.CLIENTE, ROLES.AUDITOR])) {
         <a routerLink="/workorders" routerLinkActive="active">Órdenes</a>
       }
       @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.SUPERVISOR])) {
         <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
       }
-      @if (auth.hasAnyRole([ROLES.ADMIN])) {
+      @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.AUDITOR])) {
         <a routerLink="/reports" routerLinkActive="active">Reportería</a>
       }
       @if (auth.hasAnyRole([ROLES.ADMIN, ROLES.AUDITOR])) {
